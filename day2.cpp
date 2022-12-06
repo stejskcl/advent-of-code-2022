@@ -1,48 +1,41 @@
 #include <iostream>
 #include <fstream>
-#include <utility>
-#include <vector>
-#include <unordered_map>
-#include <iterator>
 #include <cmath>
 
 using namespace std;
 
-int mod(int a, int n) {
-    int q = (int)floor((double)a / n);
+/*
+* Returns the score from one turn given the characters
+* of that turn.
+* If fromOutcome = false, it returns points based on
+* X = rock, Y = paper, Z = scissors
+* If fromOutcome = true, it returns points based on
+* X = lose, Y = draw, Z = win
+*/
+int getScore(char op, char me, bool fromOutcome) {
+    int opNum = (op - 65) % 23;
+    int meNum = (me - 65) % 23;
 
-	// Return the resultant remainder
-	return a - n * q;
-}
-
-int pointsFromOutcome(int oppInt, int meInt) {
-    int dif = (oppInt - meInt) % 3;
-    cout << dif << endl;
-    return dif * 3;
-    // if ((meInt + 2) % 3 == oppInt) {
-    //     return 6;
-    // } else if ((oppInt + 2) % 3 == meInt ) {
-    //     return 0;
-    // }
-    // return 3;
-}
-
-int getScoreFromOutcome(char opp, char me) {
-    int oppInt = (opp - 65) % 23;
-    int x = ((me - 65) % 23 + 2) % 3;
-    int meInt = (oppInt + x) % 3;
-    return pointsFromOutcome(oppInt, meInt) + meInt + 1;
+    if (fromOutcome) {
+        meNum = (meNum + 2) % 3;
+        meNum = (meNum + opNum) % 3;
+    }
+    
+    int choicePts = meNum + 1;
+    int shift = (2 * opNum + 1) % 3;
+    int shiftMeNum = (shift + meNum) % 3;
+    int outcomePts = shiftMeNum * 3;
+    return choicePts + outcomePts;
 }
 
 int main() {
     int total = 0;
     string line;
     ifstream file;
-    file.open("input.txt");
+    file.open("input/day2.txt");
     while (getline(file, line)) {
-        char opp = line.at(0);
-        char me = line.at(2);
-        total += getScoreFromOutcome(opp, me);;
+        //total += getScore(line.at(0), line.at(2), false);  // part 1
+        total += getScore(line.at(0), line.at(2), true);  // part 2
     }
     cout << total << endl;
 }
