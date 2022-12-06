@@ -18,7 +18,7 @@ using namespace std;
 int main() {
     string line;
     ifstream file;
-    file.open(\"day$1.txt\");
+    file.open(\"input/day$1.txt\");
     while (getline(file, line)) {
         cout << line << endl;
     }
